@@ -8,27 +8,52 @@ var imageDatas = require('../data/imageDatas.json');
 
 
 //利用自执行函数，将图片名转化为图片路径
-imageDatas = (function generateInmageURL(imageDatasArr){
-  for(let i=0, j=imageDatasArr.length; i<j.length; i++){
+function generateInmageURL(imageDatasArr) {
+  for(var i=0, j=imageDatasArr.length; i<j; i++){
 
-    let signalImageData = imageDatasArr[i];
-    signalImageData.imageURL = require('../images'+signalImageData.fileName);
+    var signalImageData = imageDatasArr[i];
+    signalImageData.imageURL = require('../images/' + signalImageData.fileName);
 
-    imageDatasArr[i] = signalImageData;
+    imageDatasArr[i]= signalImageData;
+
   }
   return imageDatasArr;
-})(imageDatas);
+}
 
+imageDatas = generateInmageURL(imageDatas);
+
+
+var ImgFigure = React.createClass({
+  render:function () {
+      return (
+        <figure className="img-figure">
+          <img src={this.props.data.imageURL}
+                alt={this.props.data.description} />
+          <figcaption>
+            <h2 className="image-title">{this.props.data.title}</h2>
+          </figcaption>
+        </figure>
+      );
+  }
+});
 
 class AppComponent extends React.Component {
   render() {
+
+    var controllerUnits = [],
+        imgFigures = [];
+
+    imageDatas.forEach((value,index) =>
+      imgFigures.push(<ImgFigure data={value} key={index}/>)
+    );
+
     return (
       <section className="stage">
           <section className="image-sec">
-            1
+              {imgFigures}
           </section>
           <nav className="controller-nav">
-            2
+              {controllerUnits}
           </nav>
       </section>
 
